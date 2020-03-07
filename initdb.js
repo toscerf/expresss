@@ -20,10 +20,10 @@ var beers = [
 async function initDb() {
     client = await MongoClient.connect(url);
     const db = client.db(dbName);
-    db.beers.drop();
+    let dropped = await db.beers.drop();
     beers.forEach( async (beerName) => {
         let beer = require(`./step-05/beers/${beerName}.json`);
-        db.beers.insert(beer);
+        let inserted = await db.beers.insert(beer);
     });
 } 
 
