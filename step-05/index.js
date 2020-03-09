@@ -7,7 +7,7 @@ var MongoClient = require('mongodb').MongoClient;
 app.get('/beers', async function (req, res) {
   console.log('Received request for beers from', req.ip);
   let client;
-  try {  
+  try {
     client = await MongoClient.connect(url);
     const db = client.db(dbName);
     var beerList = await db.collection('beers').find().toArray();
@@ -21,11 +21,11 @@ app.get('/beers', async function (req, res) {
 app.get('/beer/:beerId', async function (req, res) {
   console.log(`Received request for ${req.params.beerId} from ${req.ip}`);
   let client;
-  try {  
+  try {
     client = await MongoClient.connect(url);
     const db = client.db(dbName);
     let beerId = req.params.beerId;
-    let beerList = await db.collection('beers').find({id: beerId}).toArray(); 
+    let beerList = await db.collection('beers').find({id: beerId}).toArray();
     let beer = beerList[0];
     console.log(beer);
     res.json(beer);
@@ -38,14 +38,14 @@ app.get('/beer/:beerId', async function (req, res) {
 
 app.use('/beers/img', express.static('img'));
 app.use('/img', express.static('img'));
-app.use(express.static('public'));
+app.use(express.static('./step-05/public'));
 
-var url = 'mongodb://localhost:27017';
-var dbName = 'test'
+var url = process.env.MONGODB_ADDON_URI;
+var dbName = process.env.MONGODB_ADDON_DB;
 
 
 
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log('Listening at http://%s:%s', host, port);
